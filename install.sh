@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# chfn workaround - Known issue within Dockers
+ln -s -f /bin/true /usr/bin/chfn
+
+apt-get -q update
+apt-get install -qy gdebi-core wget
+
+PLEX_URL=$(curl -sL https://plex.tv/downloads | sed -nr 's#.*href="(.+?/plexmediaserver_.+?_amd64\.deb)".*#\1#p')
+PLEX_VERSION=$(echo $PLEX_URL | awk -F_ '{print $2}')
+
+wget -q "$PLEX_URL" -O /tmp/plexmediaserver_${PLEX_VERSION}_amd64.deb
+if [ $? -eq 0 ]; then
+    gdebi -n /tmp/plexmediaserver_${PLEX_VERSION}_amd64.deb
+    rm -f /tmp/plexmediaserver_${PLEX_VERSION}_amd64.deb
+    echo $PLEX_VERSION > /tmp/version
+fi
+
+# Fix a Debianism of plex's uid being 101
+usermod -u 999 plex && usermod -g 100 plex
+
+# Add Plex to runit
+mkdir -p /etc/service/plex
+cat <<'EOT' > /etc/service/plex/run
+#!/bin/bash
+exec /sbin/setuser plex /usr/sbin/start_pms
+EOT
+chmod +x /etc/service/plex/run
