@@ -17,12 +17,22 @@ if [ $? -eq 0 ]; then
 fi
 
 # Fix a Debianism of plex's uid being 101
-usermod -u 999 plex && usermod -g 100 plex
+usermod -u 99 plex
+usermod -g 100 plex
 
 # Add Plex to runit
 mkdir -p /etc/service/plex
 cat <<'EOT' > /etc/service/plex/run
 #!/bin/bash
+umask 000
+# Fix permission if user is 999
+if [ -d /config/Library ]; then
+	if [ "$(stat -c "%u" /config/Library/)" -eq "999" ]; then
+		echo "Fixing Plex Library permissions"
+		chown -R 99:100 /config/Library/
+		chmod -R 777 /config/Library/
+	fi
+fi
 exec /sbin/setuser plex /usr/sbin/start_pms
 EOT
 chmod +x /etc/service/plex/run
