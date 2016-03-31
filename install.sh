@@ -36,6 +36,8 @@ if [ -d /config/Library ]; then
 fi
 # Create transcode folder if needed
 mkdir -p /config/tmp
+chown -R 99:100 /config/tmp
+chmod -R 777 /config/tmp
 export TMPDIR='/config/tmp'
 exec /sbin/setuser plex /usr/sbin/start_pms
 EOT
