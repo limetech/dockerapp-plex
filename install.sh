@@ -6,7 +6,7 @@ ln -s -f /bin/true /usr/bin/chfn
 apt-get -q update
 apt-get install -qy gdebi-core wget
 
-# Plex version 0.9.15.6.1714
+# Plex version 0.9.16.3.1840
 PLEX_URL=$(curl -sL https://plex.tv/downloads | sed -nr 's#.*href="(.+?/plexmediaserver_.+?_amd64\.deb)".*#\1#p')
 PLEX_VERSION=$(echo $PLEX_URL | awk -F_ '{print $2}')
 
@@ -34,6 +34,9 @@ if [ -d /config/Library ]; then
 		chmod -R 777 /config/Library/
 	fi
 fi
+# Create transcode folder if needed
+mkdir -p /config/tmp
+export TMPDIR='/config/tmp'
 exec /sbin/setuser plex /usr/sbin/start_pms
 EOT
 chmod +x /etc/service/plex/run
