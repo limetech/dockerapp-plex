@@ -11,9 +11,6 @@ ENV DEBIAN_FRONTEND="noninteractive" HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.U
 ADD install.sh /
 RUN bash /install.sh
 
-# Define /config in the configuration file not using environment variables
-ADD plexmediaserver /etc/default/plexmediaserver
-
 VOLUME /config
 VOLUME /data
 

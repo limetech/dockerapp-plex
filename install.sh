@@ -26,6 +26,7 @@ mkdir -p /etc/service/plex
 cat <<'EOT' > /etc/service/plex/run
 #!/bin/bash
 umask 000
+
 # Fix permission if user is 999
 if [ -d /config/Library ]; then
 	if [ "$(stat -c "%u" /config/Library/)" -eq "999" ]; then
@@ -34,11 +35,21 @@ if [ -d /config/Library ]; then
 		chmod -R 777 /config/Library/
 	fi
 fi
-# Create transcode folder if needed
-mkdir -p /config/tmp
-chown -R 99:100 /config/tmp
-chmod -R 777 /config/tmp
-export TMPDIR='/config/tmp'
+
+# Create library and transcode tmp folders if needed
+mkdir -p /config/tmp "/config/Library/Application Support"
+chown 99:100 /config/tmp /config/Library "/config/Library/Application Support"
+chmod 777 /config/tmp /config/Library "/config/Library/Application Support"
+
+# Set env variables for plex
+export PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support"
+export PLEX_MEDIA_SERVER_USER=plex
+export PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
+export PLEX_MEDIA_SERVER_MAX_STACK_SIZE=10000
+export PLEX_MEDIA_SERVER_MAX_OPEN_FILES=4096
+export PLEX_MEDIA_SERVER_TMPDIR=/config/tmp
+export TMPDIR=/config/tmp
+
 exec /sbin/setuser plex /usr/sbin/start_pms
 EOT
 chmod +x /etc/service/plex/run
