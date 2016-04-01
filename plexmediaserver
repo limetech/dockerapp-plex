@@ -1,23 +1,34 @@
 # default script for Plex Media Server
 
+
+# Set home of Plex Media Server
+PLEX_MEDIA_SERVER_HOME=/usr/lib/plexmediaserver
+
 # the number of plugins that can run at the same time
-export PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
+PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
 
 # ulimit -s $PLEX_MEDIA_SERVER_MAX_STACK_SIZE
-export PLEX_MEDIA_SERVER_MAX_STACK_SIZE=10000
+PLEX_MEDIA_SERVER_MAX_STACK_SIZE=10000
+
+# ulimit -l $PLEX_MEDIA_SERVER_MAX_LOCK_MEM
+PLEX_MEDIA_SERVER_MAX_LOCK_MEM=3000
 
 # ulimit -n $PLEX_MEDIA_SERVER_MAX_OPEN_FILES
-export PLEX_MEDIA_SERVER_MAX_OPEN_FILES=4096
+PLEX_MEDIA_SERVER_MAX_OPEN_FILES=4096
 
 # where the mediaserver should store the transcodes
-export PLEX_MEDIA_SERVER_TMPDIR=/config/tmp
-export TMPDIR=/config/tmp
+PLEX_MEDIA_SERVER_TMPDIR='/config/tmp'
 
 # uncomment to set it to something else
-export PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support"
+PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR='/config/Library/Application Support'
 
-# the user that PMS should run as, defaults to 'plex'
-# note that if you change this you might need to move
-# the Application Support directory to not lose your
-# media library
-export PLEX_MEDIA_SERVER_USER=plex
+
+export LD_LIBRARY_PATH="${PLEX_MEDIA_SERVER_HOME}"
+export TMPDIR="${PLEX_MEDIA_SERVER_TMPDIR}"
+export PLEX_MEDIA_SERVER_HOME=$PLEX_MEDIA_SERVER_HOME
+export PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
+export PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=$PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS
+export PLEX_MEDIA_SERVER_TMPDIR=$PLEX_MEDIA_SERVER_TMPDIR
+ulimit -l $PLEX_MEDIA_SERVER_MAX_LOCK_MEM
+ulimit -s $PLEX_MEDIA_SERVER_MAX_STACK_SIZE
+ulimit -n $PLEX_MEDIA_SERVER_MAX_OPEN_FILES
