@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.22
+FROM phusion/baseimage:0.9.34
 MAINTAINER Lime Technology <erics@lime-technology.com>
 #Based on the work of needo <needo@superhero.org>
 #Based on the work of Eric Schultz <eric@startuperic.com>
