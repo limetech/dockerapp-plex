@@ -6,7 +6,7 @@ ln -s -f /bin/true /usr/bin/chfn
 apt-get -q update
 apt-get install -qy gdebi-core wget
 
-# Plex version 1.15.1.791-8bec0f76c
+# Plex version 1.15.2.793-782228f99
 PLEX_URL=$(curl -sL https://plex.tv/api/downloads/1.json | sed -nr 's#.*"url":"([^"]+?debian\/plexmediaserver_[^"]+?_amd64\.deb)".*#\1#p')
 PLEX_VERSION=$(echo $PLEX_URL | awk -F_ '{print $2}')
 
